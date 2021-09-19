@@ -13,10 +13,25 @@
           <%= title %>
         </h1>
         <p>This is the placeholder for Team Activity 02</p>
+        
       </div>
     </div>
     <div class="container">
-
+        <form method="POST" action="/ta02/addUser">
+          <label for="newUser">New Username:</label>
+          <input type="text" name="newUser">
+          <button type="submit">Add User</button>
+        </form>
+        <form method="POST" action="/ta02/removeUser">
+          <label for="remUser">Username to remove</label>
+          <input type="text" name="remUser">
+          <button type="submit">Remove User</button>
+        </form>
+          <% for (name of names) { %>
+            <p>
+              <%= name %>
+            </p>
+          <% } %>
     </div>
 
 
