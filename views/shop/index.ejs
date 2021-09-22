@@ -1,0 +1,29 @@
+<%- include('../includes/header.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../includes/nav.ejs') %>
+
+    <main>
+        <% if (books.length > 0) { %>
+            <div class="grid">
+                <% for (let book of books) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= book.title %></h1>
+                        </header>
+                        <div class="card__content">
+                            <h2>Author: <%= book.author %></h2>
+                            <p>Genre: <%= book.genre %></p>
+                        </div>
+                        <div class="card__actions">
+                            <button class="btn">Add to Cart</button>
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+        <% } else { %>
+            <h1>No Books Found!</h1>
+        <% } %>
+    </main>
