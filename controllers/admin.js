@@ -13,7 +13,7 @@ exports.postAddBook = (req, res, next) => {
     
     const book = new Book(title, author, genre);
     book.save();
-    res.redirect("/prove02/")
+    res.redirect("/shop/books")
 };
 
 exports.getRemoveBook = (req, res, next) => {

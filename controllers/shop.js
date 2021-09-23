@@ -6,18 +6,35 @@ exports.getBooks = (req, res, next) => {
     const books = Book.fetchAll((books) => {
         res.render("shop/prove02-booklist", {
             title: "All Products",
-            path: "/prove02",
+            path: "/books",
             books: books,
         });
     });
 };
 
+exports.getProduct = (req, res, next) => {
+    const prodId = req.params.bookId;
+    console.log(prodId);
+    
+    Book.fetchAll((books) => {
+        for(let book of books) {
+            if(book.id === prodId) {
+                res.render("shop/product-detail", {
+                        title: "Shop",
+                        path: "/prduct-detail",
+                        book: book,
+                    });
+            }
+        }
+    })    
+}
+
 exports.getIndex = (req, res, next) => {
-    const books = Book.fetchAll((books) => {
+    Book.fetchAll((data) => {
         res.render("shop/index", {
             title: "Shop",
-            path: "/prove02",
-            books: books,
+            path: "/index",
+            books: data,
         });
     });
 }

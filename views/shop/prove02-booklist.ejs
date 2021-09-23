@@ -29,7 +29,10 @@
                         <p>Genre: <%= book.genre %></p>
                     </div>
                     <div class="card__actions">
+                      <a href="/shop/book/<%= book.id %>">Details</a>
+                      <form action="/shop/add-to-cart" method="POST">
                         <button class="btn">Add to Cart</button>
+                      </form>
                     </div>
                 </article>
             <% } %>
