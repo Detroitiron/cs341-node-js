@@ -66,8 +66,8 @@ exports.getCart = (req, res, next) => {
   exports.postCart = (req, res, next) => {
     const bookId = req.body.bookId;
     Book.findById(bookId)
-      .then(books => {
-        return req.user.addToCart(books);
+      .then(book => {
+        return req.user.addToCart(book);
       })
       .then(result => {
         console.log(result);

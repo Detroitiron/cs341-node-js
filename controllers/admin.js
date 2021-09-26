@@ -15,7 +15,7 @@ exports.postAddBook = (req, res, next) => {
     const author = req.body.author;
     const genre = req.body.genre;
     
-    const book = new Book(title, author, genre);
+    const book = new Book(title, author, genre, null, req.user._id);
     book.save()
     .then(result => {
         console.log('Created Product');
