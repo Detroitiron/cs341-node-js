@@ -10,5 +10,6 @@ router.get('/', shopController.getIndex);
 router.get('/books', shopController.getBooks);
 router.get('/cart', shopController.getCart);
 router.get('/checkout', shopController.getCheckout);
-router.get('/book/:bookId', shopController.getProduct)
+router.get('/book/:bookId', shopController.getBook)
+router.post('/add-to-cart/', shopController.postCart);
 module.exports = router;

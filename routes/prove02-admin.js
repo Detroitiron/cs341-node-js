@@ -5,11 +5,12 @@ const adminController = require("../controllers/admin");
 
 router.get("/add-book", adminController.getAddBook);
 
-router.get("/products", adminController.getProducts);
+router.get("/books", adminController.getBooks);
 router.post("/add-book", adminController.postAddBook);
 
-router.get("/remove-book", adminController.getRemoveBook);
+router.post("/delete-book", adminController.postRemoveBook);
 
-router.post("/remove-book", adminController.postRemoveBook);
 
+router.get("/edit-book/:bookId", adminController.getEditBook);
+router.post("/edit-book/", adminController.postEditBook)
 module.exports = router;

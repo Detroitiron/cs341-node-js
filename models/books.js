@@ -1,8 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-const pathUtil = require('../util/path');
-
-const p = path.join(pathUtil, 'data', 'books.json');
+const mongodb = require('mongodb')
+const { getDb } = require('../util/database')
 
 const getBooksFromFile = (cb) => {
     fs.readFile(p, (err, fileContent) => {
@@ -14,39 +11,60 @@ const getBooksFromFile = (cb) => {
     });
 }
 module.exports = class Book {
-    constructor(title, author, genre) {
+    constructor(title, author, genre, id, userId) {
         this.title = title;
         this.author = author;
         this.genre = genre;
+        this._id = id ? new mongodb.ObjectId(id) : null;
+        this.userId = userId;
     }
     
     save () {
-        this.id = Math.random().toString();
-        getBooksFromFile(books => {
-            books.push(this);
-                fs.writeFile(p, JSON.stringify(books), (err) => {
-                    console.log(err);
-            })
+        const db = getDb();
+        let dbOp;
+        if (this._id){
+            dbOp = db.collection('books').updateOne({_id: this._id}, {$set: this});
+        } else {
+            dbOp = db.collection('books').insertOne(this)
+        }
+        return dbOp.then(result => {
+            console.log(result);
         })
-        
+        .catch(err => {
+            console.log(err);
+        });
     }
 
-    static fetchAll(cb) {
-        getBooksFromFile(cb)
+    static fetchAll() {
+        const db = getDb();
+        return db.collection('books').find().toArray()
+        .then(result => {
+            console.log(result);
+            return result;
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
-    static removeBook(remProduct, cb) {
-        fs.readFile(p, (err, fileContent) => {
-            if (err) {
-                cb({err: "No books available", data: []});
-            }
-            const books = JSON.parse(fileContent);
-            for(let i = 0; i < books.length; i++) {
-                if (books[i].title === remProduct){
-                    books.splice(i, 1);
-                }
-            }
-            cb(books);
+    static findById(bookId) {
+        const db = getDb();
+        return db.collection('books').find({_id: new mongodb.ObjectId(bookId)}).next()
+        .then(result => {
+            console.log(result);
+            return result;
         })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+    static deleteById(bookId) {
+        const db = getDb();
+        return db.collection('books').deleteOne({_id: new mongodb.ObjectId(bookId)})
+        .then(result => {
+            console.log("deleted");
+        })
+        .catch(err => console.log(err));
     }
 }

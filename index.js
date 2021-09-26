@@ -11,14 +11,16 @@
  * IMPORTANT: Make sure to run "npm install" in your root before "npm start"
  *******************************************************************************/
 // Our initial setup (package requires, port number setup)
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
 const PORT = process.env.PORT || 5000; // So we can run on heroku || (OR) localhost:5000
 
-const app = express();
-
+const mongoConnect = require('./util/database').mongoConnect;
+const User = require('./models/user');
 // Route setup. You can implement more in the future!
+const app = express();
 const ta01Routes = require('./routes/ta01');
 const ta02Routes = require('./routes/ta02');
 const ta03Routes = require('./routes/ta03');
@@ -40,8 +42,7 @@ app
   .use('/ta02', ta02Routes)
   .use('/ta03', ta03Routes)
   .use('/ta04', ta04Routes)
-  .use('/admin', prove02Routes)
-  .use('/shop', prove03Routes)
+  
   .get('/', (req, res, next) => {
     // This is the primary index, always handled last.
     res.render('pages/index', {
@@ -53,4 +54,18 @@ app
     // 404 page
     res.render('pages/404', { title: '404 - Page Not Found', path: req.url });
   })
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+  app.use((req, res, next) => {
+    User.findById("61500225ed7409ad21b4d066")
+    .then(user => {
+      req.user = new User(user.name, user.email, user.cart, user._id);
+      next();
+    })
+    .catch(err => console.log(err));
+  });
+  app.use('/admin', prove02Routes);
+  app.use('/shop', prove03Routes);
+
+  mongoConnect((client) => {
+    app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+  })

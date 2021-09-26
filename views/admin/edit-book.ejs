@@ -1,0 +1,28 @@
+<%- include('../includes/header.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/book.css">
+</head>
+
+<body>
+   <%- include('../includes/nav.ejs') %>
+
+    <main style="margin-left: 2rem; margin-right: 2rem">
+        <form class="book-form" action="/admin/<% if (editing) { %>edit-book<% } else { %>add-book<% } %>" method="POST">
+            <div class="form-control">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" value="<% if (editing) { %><%= book.title %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="author">Author</label>
+                <input type="text" name="author" id="author" value="<% if (editing) { %><%= book.author %><% } %>">
+            </div>
+            <div class="form-control">
+                <label for="genre">Genre</label>
+                <input type="text" name="genre" id="genre" value="<% if (editing) { %><%= book.genre %><% } %>">
+            </div>
+            <% if (editing) { %>
+                <input type="hidden" value="<%= book._id %>" name="bookId">
+            <% } %>
+            <button class="btn" type="submit"><% if (editing) { %>Update book<% } else { %>Add book<% } %></button>
+        </form>
+    </main>
