@@ -1,19 +1,12 @@
-const { ObjectId } = require('bson');
 const Book = require('../models/books');
 
 
 
 exports.getBooks = (req, res, next) => {
-   Book.fetchAll().then((data) => {
-    let books;
-    console.log("DATA: ", data);
-    if (data === undefined){
-        books = [];
-        } else {
-            books = data;
-        }
+   Book.find()
+   .then((books) => {
         res.render("shop/prove02-booklist", {
-            title: "All Products",
+            title: "All Books",
             path: "/books",
             books: books,
         });
@@ -23,23 +16,19 @@ exports.getBooks = (req, res, next) => {
 exports.getBook = (req, res, next) => {
     const bookId = req.params.bookId;
     
-    Book.findById(bookId).then((book) => {
-                res.render("shop/product-detail", {
-                        title: "Shop",
-                        path: "/prduct-detail",
-                        book: book,
-                    });
+    Book.findById(bookId)
+    .then((book) => {
+        res.render("shop/book-detail", {
+            title: book.title,
+            path: "/prduct-detail",
+            book: book,
+        });
     })    
 }
 
 exports.getIndex = (req, res, next) => {
-    Book.fetchAll().then((data) => {
-        let books;
-        if (data === undefined) {
-            books = [];
-        } else {
-            books = data;
-        }
+    Book.find()
+    .then((books) => {
         res.render("shop/index", {
             title: "Shop",
             path: "/index",
@@ -52,12 +41,14 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
     req.user
-    .getCart()
-    .then(books => {
-    res.render('shop/cart', {
-        path: '/cart',
-        pageTitle: 'Your Cart',
-        books: books
+    .populate('cart.items.bookId')
+    .execPopulate()
+    .then(user => {
+        const books = user.cart.items;
+        res.render('shop/cart', {
+            path: '/cart',
+            pageTitle: 'Your Cart',
+            books: books,
     });
     })
       .catch(err => console.log(err));
@@ -75,20 +66,51 @@ exports.getCart = (req, res, next) => {
       });
   };
   
-  exports.postCartDeleteProduct = (req, res, next) => {
+  exports.postCartDeleteBook = (req, res, next) => {
     const bookId = req.body.bookId;
     req.user
-      .deleteItemFromCart(bookId)
+      .removeFromCart(bookId)
       .then(result => {
         res.redirect('/cart');
       })
       .catch(err => console.log(err));
   };
   
-
-exports.getCheckout = (req, res, next) => {
-    res.render('shop/checkout', {
-        path: '/checkout',
-        pageTitle: "Checkout"
-    });
-};
+  exports.postOrder = (req, res, next) => {
+    req.user
+      .populate('cart.items.bookId')
+      .execPopulate()
+      .then(user => {
+        const books = user.cart.items.map(i => {
+          return { quantity: i.quantity, book: { ...i.bookId._doc } };
+        });
+        const order = new Order({
+          user: {
+            email: req.user.email,
+            userId: req.user
+          },
+          books: books
+        });
+        return order.save();
+      })
+      .then(result => {
+        return req.user.clearCart();
+      })
+      .then(() => {
+        res.redirect('/orders');
+      })
+      .catch(err => console.log(err));
+  };
+  
+  exports.getOrders = (req, res, next) => {
+    Order.find({ 'user.userId': req.user._id })
+      .then(orders => {
+        res.render('shop/orders', {
+          path: '/orders',
+          pageTitle: 'Your Orders',
+          orders: orders,
+        });
+      })
+      .catch(err => console.log(err));
+  };
+  

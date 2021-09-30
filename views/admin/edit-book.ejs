@@ -1,6 +1,6 @@
 <%- include('../includes/header.ejs') %>
-    <link rel="stylesheet" href="/css/forms.css">
-    <link rel="stylesheet" href="/css/book.css">
+    <link rel="stylesheet" href="/stylesheets/forms.css">
+    <link rel="stylesheet" href="/stylesheets/book.css">
 </head>
 
 <body>
@@ -23,6 +23,7 @@
             <% if (editing) { %>
                 <input type="hidden" value="<%= book._id %>" name="bookId">
             <% } %>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button class="btn" type="submit"><% if (editing) { %>Update book<% } else { %>Add book<% } %></button>
         </form>
     </main>

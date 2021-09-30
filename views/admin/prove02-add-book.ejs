@@ -29,6 +29,8 @@
                 <label for="genre">Genre:</label>
                 <input type="text" name="genre">
             </div>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
             <button type="submit">Add Book</button>
         </form>
     </div>

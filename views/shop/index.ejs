@@ -18,6 +18,7 @@
                             <p>Genre: <%= book.genre %></p>
                         </div>
                         <div class="card__actions">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="btn">Add to Cart</button>
                         </div>
                     </article>
