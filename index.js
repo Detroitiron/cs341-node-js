@@ -74,5 +74,5 @@ app.use(express.static(path.join(__dirname, 'public')))
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
   })
   .catch(err => {
-    console.log(err);
+    console.log("ERROR:", err);
   });
