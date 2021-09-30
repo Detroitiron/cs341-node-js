@@ -8,6 +8,8 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const errorController = require('./controllers/error');
+
 const User = require('./models/user');
 // Route setup. You can implement more in the future!
 const ta01Routes = require('./routes/ta01');
@@ -17,7 +19,6 @@ const ta04Routes = require('./routes/ta04');
 
 const prove02Routes = require('./routes/prove02-admin');
 const prove03Routes = require('./routes/prove03-shop');
-const errorRoutes = require('./routes/error');
 const authRoutes = require('./routes/auth');
 const MONGODB_URI = 
 "mongodb+srv://dummy:JddIw3TIiyGuXIUX@cluster0.2ckfi.mongodb.net/shop";;
@@ -63,14 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 .use('/admin', prove02Routes)
 .use('/shop', prove03Routes)
 .use('/auth', authRoutes)
-.get('/', (req, res, next) => {
-  // This is the primary index, always handled last.
-  res.render('pages/index', {
-    title: 'Welcome to my CSE341 repo',
-    path: '/',
-  });
-})
-.get(errorRoutes);
+.get(errorController.getError);
 
   
 
