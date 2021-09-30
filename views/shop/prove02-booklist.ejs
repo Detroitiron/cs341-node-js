@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <link rel="stylesheet" href="/css/books.css">
+  <link rel="stylesheet" href="/stylesheet/books.css">
 
 <head>
   <% include ../includes/header.ejs %>
@@ -31,6 +31,7 @@
                       <a href="/shop/book/<%= book._id %>">Details</a>
                       <% if (isAuthenticated) { %>
                       <form action="/shop/add-to-cart" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <input type="hidden" name="bookId" value="<%= book._id %>">
                         <button class="btn">Add to Cart</button>
                       </form>
