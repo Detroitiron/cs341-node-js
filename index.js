@@ -1,16 +1,3 @@
-/*******************************************************************************
- * Feel free to remove this comment block and all other comments after pulling.
- * They're for information purposes only.
- *
- * This layout is provided to you for an easy and quick setup to either pull
- * or use to correct yours after working at least 1 hour on Team Activity 02.
- * Throughout the course, we'll be using Express.js for our view engines.
- * However, feel free to use pug or handlebars ('with extension hbs'). You will
- * need to make sure you install them beforehand according to the reading from
- * Udemy course.
- * IMPORTANT: Make sure to run "npm install" in your root before "npm start"
- *******************************************************************************/
-// Our initial setup (package requires, port number setup)
 const path = require('path');
 
 const express = require('express');
@@ -18,9 +5,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 5000; // So we can run on heroku || (OR) localhost:5000
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-const MongoDBStore = require('connect-mongodb-session')(session);
 const User = require('./models/user');
 // Route setup. You can implement more in the future!
 const ta01Routes = require('./routes/ta01');
@@ -32,9 +19,10 @@ const prove02Routes = require('./routes/prove02-admin');
 const prove03Routes = require('./routes/prove03-shop');
 const errorRoutes = require('./routes/error');
 const authRoutes = require('./routes/auth');
+const MONGODB_URI = 
+"mongodb+srv://dummy:JddIw3TIiyGuXIUX@cluster0.2ckfi.mongodb.net/shop";;
 const app = express();
 
-const MONGODB_URI = "mongodb+srv://dummy:JddIw3TIiyGuXIUX@cluster0.2ckfi.mongodb.net/shop?retryWrites=true&w=majority";;
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'sessions'
@@ -58,7 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')))
   }
     User.findById(req.session.user._id)
     .then(user => {
-      req.user = new User(user.email, user.password, user.cart, user._id);
+      req.user = user;
       next();
     })
     .catch(err => console.log(err));
@@ -80,29 +68,16 @@ app.use(express.static(path.join(__dirname, 'public')))
   res.render('pages/index', {
     title: 'Welcome to my CSE341 repo',
     path: '/',
-    isAuthenticated: req.session.isLoggedIn,
   });
 })
 .get(errorRoutes);
 
   
 
-  mongoose.connect(MONGODB_URI)
+  mongoose
+  .connect(MONGODB_URI)
   .then((result) => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: 'Max',
-          email: 'max@test.com',
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
-    });
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
-
   })
   .catch(err => {
     console.log(err);
