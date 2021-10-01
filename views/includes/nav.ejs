@@ -20,23 +20,23 @@
           <li class="<%= path === '/prove02' ? 'active' : ''%>"><a href="/prove02">Prove02</a></li>
         </ul>
       </li> -->
-      <li><a class="<%= path === '/books' ? 'active' : ''%>" href="/shop/books">Books</a></li>
+      <li><a class="<%= path === '/books' ? 'active' : ''%>" href="/books">Books</a></li>
       <% if (isAuthenticated) { %>
       <li><a class="<%= path === '/admin/add-book' ? 'active' : ''%>" href="/admin/add-book">Add Book</a></li>
       <li><a class="<%= path === '/admin/books' ? 'active' : ''%>" href="/admin/books">Admin Books</a></li>
-      <li><a class="<%= path === '/cart' ? 'active' : ''%>" href="/shop/cart">Cart</a></li>
-      <li><a class="<%= path === '/checkout' ? 'active' : ''%>" href="/shop/checkout">Checkout</a></li>
+      <li><a class="<%= path === '/cart' ? 'active' : ''%>" href="/cart">Cart</a></li>
+      <li><a class="<%= path === '/checkout' ? 'active' : ''%>" href="/checkout">Checkout</a></li>
       <% } %>
         <% if (!isAuthenticated) { %>
         <li>
-          <a class="<%= path === '/login' ? 'active' : ''%>" href="/auth/login">Login</a>
+          <a class="<%= path === '/login' ? 'active' : ''%>" href="/login">Login</a>
         </li>
         <li>
-          <a class="<%= path === '/signup' ? 'active' : ''%>" href="/auth/signup">Signup</a>
+          <a class="<%= path === '/signup' ? 'active' : ''%>" href="/signup">Signup</a>
         </li>
         <% } else { %>
         <li>
-          <form action="/auth/logout" method="post">
+          <form action="/logout" method="post">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <button type="submit">Logout</button>
           </form>

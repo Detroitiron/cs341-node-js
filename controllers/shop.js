@@ -1,4 +1,6 @@
 const Book = require('../models/books');
+const Order = require('../models/user');
+const { get500 } = require('../util/error');
 
 
 
@@ -10,7 +12,7 @@ exports.getBooks = (req, res, next) => {
             path: "/books",
             books: books,
         });
-    }).catch(err => console.log(err));
+    }).catch(err => get500(err, next));
 };
 
 exports.getBook = (req, res, next) => {
@@ -23,7 +25,7 @@ exports.getBook = (req, res, next) => {
             path: "/prduct-detail",
             book: book,
         });
-    })    
+    }).catch(err => get500(err, next))    
 }
 
 exports.getIndex = (req, res, next) => {
@@ -34,15 +36,12 @@ exports.getIndex = (req, res, next) => {
             path: "/index",
             books: books,
         });
-    }).catch(err => {
-        console.log(err);
-    });
+    }).catch(err => get500(err, next));
 }
 
 exports.getCart = (req, res, next) => {
     req.user
     .populate('cart.items.bookId')
-    .execPopulate()
     .then(user => {
         const books = user.cart.items;
         res.render('shop/cart', {
@@ -51,7 +50,7 @@ exports.getCart = (req, res, next) => {
             books: books,
     });
     })
-      .catch(err => console.log(err));
+      .catch(err => get500(err, next));
   };
   
   exports.postCart = (req, res, next) => {
@@ -73,22 +72,18 @@ exports.getCart = (req, res, next) => {
       .then(result => {
         res.redirect('/cart');
       })
-      .catch(err => console.log(err));
+      .catch(err => get500(err, next));
   };
   
   exports.postOrder = (req, res, next) => {
     req.user
       .populate('cart.items.bookId')
-      .execPopulate()
       .then(user => {
         const books = user.cart.items.map(i => {
           return { quantity: i.quantity, book: { ...i.bookId._doc } };
         });
         const order = new Order({
-          user: {
-            email: req.user.email,
-            userId: req.user
-          },
+          user: user,
           books: books
         });
         return order.save();
@@ -111,6 +106,6 @@ exports.getCart = (req, res, next) => {
           orders: orders,
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => get500(err, next));
   };
   

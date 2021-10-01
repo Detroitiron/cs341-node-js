@@ -28,9 +28,9 @@
                         <p>Genre: <%= book.genre %></p>
                     </div>
                     <div class="card__actions">
-                      <a href="/shop/book/<%= book._id %>">Details</a>
+                      <a href="/book/<%= book._id %>">Details</a>
                       <% if (isAuthenticated) { %>
-                      <form action="/shop/add-to-cart" method="POST">
+                      <form action="/cart" method="POST">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <input type="hidden" name="bookId" value="<%= book._id %>">
                         <button class="btn">Add to Cart</button>
