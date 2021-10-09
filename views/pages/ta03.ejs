@@ -12,7 +12,29 @@
         <h1>
           <%= title %>
         </h1>
-        <p>This is the placeholder for Team Activity 03</p>
+        <% for(var i=0; i<data.length; i++) {%>
+          <% if(i % 3==0) { %>
+             <div class="card-deck">
+                <% } %>
+                   <div class="card cCard">
+                      <img src="<%= data[i].imageUrl %>" class="card-img-top cImage">
+                      <div class="card-body">
+                         <h5 class="card-title">
+                            <%= data[i].name %>
+                         </h5>
+                         <h6>
+                            <%= data[i].price %>
+                         </h6>
+                         <p class="card-text cText">
+                            <%= data[i].description %>
+                         </p>
+                      </div>
+                   </div>
+                   <% if(i % 3==2) { %>
+             </div>
+             <br>
+             <% } %>
+                <% } %>
       </div>
     </div>
     <div class="container">

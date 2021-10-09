@@ -14,7 +14,7 @@ const User = require('./models/user');
 // Route setup. You can implement more in the future!
 const ta01Routes = require('./routes/ta01');
 const ta02Routes = require('./routes/ta02');
-const ta03Routes = require('./routes/ta03');
+const pr08Routes = require('./routes/pr08');
 const ta04Routes = require('./routes/ta04');
 
 const prove02Routes = require('./routes/prove02-admin');
@@ -64,7 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 })
 .use('/ta01', ta01Routes)
 .use('/ta02', ta02Routes)
-.use('/ta03', ta03Routes)
+.use('/ta03', pr08Routes)
 .use('/ta04', ta04Routes)
 .use('/admin', prove02Routes)
 .use(prove03Routes)
