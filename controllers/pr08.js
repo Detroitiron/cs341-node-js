@@ -14,7 +14,7 @@ const renderIndex = (req, res, json) => {
   );
 
   let stuff = {
-    data: filteredData.slice(indexStart, indexEnd), // For JSON/Array and not Mongoose, .slice() works best.
+    data: filteredData.slice(indexStart, indexEnd), // For JSON/Array and not Mongoose, .slice() works best. For mongoose use one of the removes.
     path: 'proveAssignments/03',
     title: 'Lesson 3 Prove Assignment',
     searchedValue: searchedValue,
