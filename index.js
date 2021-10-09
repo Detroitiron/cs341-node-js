@@ -21,7 +21,7 @@ const prove02Routes = require('./routes/prove02-admin');
 const prove03Routes = require('./routes/prove03-shop');
 const authRoutes = require('./routes/auth');
 const MONGODB_URI = 
-"mongodb+srv://dummy:JddIw3TIiyGuXIUX@cluster0.2ckfi.mongodb.net/shop";;
+"mongodb+srv://dummy:JddIw3TIiyGuXIUX@cluster0.2ckfi.mongodb.net/shop";
 const app = express();
 
 const store = new MongoDBStore({
